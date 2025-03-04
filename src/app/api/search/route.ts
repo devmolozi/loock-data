@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'edge'; // Adiciona suporte a Edge Runtime
 
-export const maxDuration = 300; // Aumenta para 5 minutos
+export const maxDuration = 10; // Aumenta para 5 minutos
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
