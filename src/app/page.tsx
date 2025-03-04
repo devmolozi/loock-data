@@ -28,7 +28,7 @@ export default function Home() {
     setLoginData(null);
 
     try {
-      const response = await fetch(`/api/api-loockdata/search?url=${encodeURIComponent(searchUrl)}`);
+      const response = await fetch(`/api/search?url=${encodeURIComponent(searchUrl)}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -68,7 +68,7 @@ export default function Home() {
                 onChange={(e) => setSearchUrl(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
-              
+
             </div>
             <div className="flex gap-4">
               <li className="text-lg"><Link href="api/api-loockdata">API</Link></li>
@@ -87,7 +87,7 @@ export default function Home() {
         {(loading || error || loginData) && (
           <div className="logins mt-10 pt-5 w-full max-w-4xl">
             {loading ? (
-              <p className="text-center text-green-500">Carregando, por favor aguarde...</p>
+              <p className="text-center text-green-500">Loading, please wait...</p>
             ) : error ? (
               <div className="text-center">
                 <p className="text-red-500">{error}</p>

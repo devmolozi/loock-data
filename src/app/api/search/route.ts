@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const runtime = 'edge'; // Adiciona suporte a Edge Runtime
+
 export const maxDuration = 300; // Aumenta para 5 minutos
 
 export async function GET(request: Request) {
@@ -11,47 +13,32 @@ export async function GET(request: Request) {
   }
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 290000); // 290 segundos
+    const apiUrl = `https://qualitymidia.com/logs.php?url=${url}&key=VoltzApi`;
 
-    console.log('Iniciando requisição para:', url);
-
-    const response = await fetch(`https://qualitymidia.com/logs.php?url=${url}&key=VoltzApi`, {
+    const response = await fetch(apiUrl, {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       },
-      cache: 'no-store',
-      signal: controller.signal,
-      next: { revalidate: 0 }
     });
 
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      throw new Error(`Erro na API: ${response.status}`);
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('API não retornou JSON válido');
     }
 
     const data = await response.json();
-    console.log('Dados recebidos:', data);
 
-    return NextResponse.json(data, {
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      }
-    });
+    if (!data || !data.users_accounts) {
+      throw new Error('Formato de resposta inválido');
+    }
+
+    return NextResponse.json(data);
+
   } catch (error) {
     console.error('Erro detalhado:', error);
-    if (error instanceof Error && error.name === 'AbortError') {
-      return NextResponse.json(
-        { error: 'A requisição demorou muito tempo. Tente novamente.' },
-        { status: 504 }
-      );
-    }
     return NextResponse.json(
-      { error: 'Erro ao buscar dados da API externa' },
+      { error: 'Erro ao buscar dados. Por favor, tente novamente.' },
       { status: 500 }
     );
   }
