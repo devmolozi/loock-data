@@ -28,7 +28,7 @@ export default function Home() {
     setLoginData(null);
 
     try {
-      const response = await fetch(`/api/search?url=${encodeURIComponent(searchUrl)}`);
+      const response = await fetch(`/api/api-loockdata/search?url=${encodeURIComponent(searchUrl)}`);
       const data = await response.json();
 
       if (!response.ok) {
