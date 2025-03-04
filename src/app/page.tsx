@@ -62,7 +62,8 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Search..."
-                className="p-1 text-lg border-b-1 border-gray-300 w-full sm:w-64"
+                className="p-1 text-lg border-b border-gray-300 w-full sm:w-64 focus:border-b focus:border-blue-500 outline-none"
+
                 value={searchUrl}
                 onChange={(e) => setSearchUrl(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
