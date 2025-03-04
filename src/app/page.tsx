@@ -3,9 +3,17 @@
 import Link from "next/link";
 import { useState } from "react";
 
+interface LoginData {
+  url: string;
+  username: string;
+  password: string;
+}
+
+
 export default function Home() {
+
   const [searchUrl, setSearchUrl] = useState("");
-  const [loginData, setLoginData] = useState(null);
+  const [loginData, setLoginData] = useState<LoginData[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -54,12 +62,17 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Search..."
-                className="p-1 ml-5 mr-5 text-lg border-b-1 border-gray-300 w-full sm:w-64 focus:outline-none  focus:border-b-blue-500"
+                className="p-1 text-lg border-b-1 border-gray-300 w-full sm:w-64"
                 value={searchUrl}
                 onChange={(e) => setSearchUrl(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
-
+              <button
+                onClick={handleSearch}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer whitespace-nowrap"
+              >
+                Search
+              </button>
             </div>
             <div className="flex gap-4">
               <li className="text-lg"><Link href="api/api-loockdata">API</Link></li>
