@@ -1,4 +1,3 @@
-
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -14,11 +13,15 @@ export async function GET(request: Request) {
       headers: {
         'Accept': 'application/json',
       },
+      cache: 'no-store'
     });
 
     if (!response.ok) {
       throw new Error(`Erro na API: ${response.status}`);
     }
+
+    console.log('URL recebida:', url);
+    console.log('Resposta da API:', await response.text());
 
     const data = await response.json();
     return NextResponse.json(data);
